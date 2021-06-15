@@ -26,7 +26,6 @@ class DatabaseManager:
 
     def create_table(self, table_name, columns):
         columns_with_types=[
-            with their data types and constraints
             f'{column_name} {data_type}'
             for column_name, data_type in columns.items()
         ]
@@ -38,8 +37,8 @@ class DatabaseManager:
             )
     
     def add(self, table_name, data):
-        placeholder = ', '.join('?' * len( data ))
         column_names = ', '.join(data.keys())
+        placeholder = ', '.join('?' * len( data ))
         column_values = tuple(data.values())
 
         self._execute(
@@ -50,4 +49,17 @@ class DatabaseManager:
             ''',
             column_values
         )
+    
+    def delete(self, table_name, conditions):
+        placeholder = [f'{column} = ?' for column in conditions.keys()]
+        delete_conditions = 'AND '.join(placeholder)
+        self._execute(
+            f'''
+            DELETE FROM { table_name }
+            WHERE { delete_conditions };
+            ''',
+            tuple(conditions.valumes()
+            )
+        )
+        
 
