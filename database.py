@@ -61,5 +61,22 @@ class DatabaseManager:
             tuple(conditions.valumes()
             )
         )
+    
+    def select(self, table_name, conditions=None, order_by=None):
+        conditions = conditions or {}
+        query = f'SELECT * FROM {table_name}'
+
+        if conditions:
+            placeholder = [f'{column} = ?' for column in conditions.keys()]
+            select_conditions = ' AND '.join(placeholder)
+            query += f' WHERE {select_conditions}'
+
+        if order_by:
+            query += f' ORDER BY {order_by}'
+        
+        return self._execute(
+            query,
+            tuple(conditions.values()),
+        )
         
 
