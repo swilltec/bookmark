@@ -58,7 +58,7 @@ class DatabaseManager:
             DELETE FROM { table_name }
             WHERE { delete_conditions };
             ''',
-            tuple(conditions.valumes()
+            tuple(conditions.values()
             )
         )
     
