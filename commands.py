@@ -26,14 +26,14 @@ class AddBookmarkCommand:
 
 
 class ListBookmarksCommand:
-    def __init__(self, order_by='title'):
+    def __init__(self, order_by='date_added'):
         self.order_by = order_by
 
     def execute(self):
         return db.select('bookmarks', order_by=self.order_by).fetchall()
 
 
-class DeleteBooksCommand:
+class DeleteBookmarkCommand:
     def execute(self, data):
         db.delete('bookmarks', {'id': data})
         return 'Bookmark deleted!'
