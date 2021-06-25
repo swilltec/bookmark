@@ -1,9 +1,11 @@
+import sys
 from datetime import datetime
 
 from database import DatabaseManager
 
 
 db = DatabaseManager('bookmarks.db')
+
 
 class CreateBookmarksTableCommand:
     def execute(self):
@@ -35,3 +37,8 @@ class DeleteBooksCommand:
     def execute(self, data):
         db.delete('bookmarks', {'id': data})
         return 'Bookmark deleted!'
+
+
+class QuitCommand:
+    def execute(self):
+        sys.exist()
