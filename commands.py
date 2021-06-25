@@ -5,7 +5,7 @@ from database import DatabaseManager
 
 db = DatabaseManager('bookmarks.db')
 
-class CreateBookMarksTableCommand:
+class CreateBookmarksTableCommand:
     def execute(self):
         db.create_table('bookmarks', {
             'id': 'integer primary key autoincrement',
@@ -21,3 +21,11 @@ class AddBookmarkCommand:
         data['date_added'] = datetime.utcnow().isoformat()
         db.add('bookmarks', data)
         return 'Bookmark added!'
+
+
+class ListBookmarksCommand:
+    def __init__(self, order_by='title'):
+        self.order_by = order_by
+
+    def execute(self):
+        return db.select('bookmarks', order_by=self.order_by).fetchall()
