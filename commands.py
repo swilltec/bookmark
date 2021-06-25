@@ -41,4 +41,4 @@ class DeleteBooksCommand:
 
 class QuitCommand:
     def execute(self):
-        sys.exist()
+        sys.exit()
