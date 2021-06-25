@@ -23,6 +23,18 @@ def print_options(options):
     print()
 
 
+def option_choice_is_valid(choice, options):
+    return choice in options or choice.upper() in options
+ 
+
+def get_option_choice(options):
+    choice = input('choose an option: ')
+    while not option_choice_is_valid(choice, options):
+        print('Invalid choice')
+        choice = input('Choose an option: ')
+    return options[choice.upper()]
+
+
 if __name__ == '__main__':
     print('Welcome to Swill!')
     commands.CreateBookmarksTableCommand().execute()
@@ -37,3 +49,7 @@ if __name__ == '__main__':
         'Q': Option('Quit', commands.QuitCommand())
     }
     print_options(options)
+    chosen_option = get_option_choice(options)
+    chosen_option.choose()
+
+
