@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 import commands
 
@@ -23,6 +24,14 @@ def print_options(options):
     for shortcut, option in options.items():
         print(f'({shortcut}) {option}')
     print()
+
+
+def get_github_import_options():
+    return {
+        'github_username': get_user_input('Github username'),
+        'preserve_timestamps': get_user_input(
+            'Preserve timestamps [Y/N]', required=False) in {'Y', 'y', None},
+    }
 
 
 def option_choice_is_valid(choice, options):
@@ -73,7 +82,7 @@ if __name__ == '__main__':
     print('Welcome to Swill!')
     commands.CreateBookmarksTableCommand().execute()
 
-    options = {
+    options = OrderedDict({
         'A': Option('Add a bookmark', commands.AddBookmarkCommand(),
                     prep_call=get_new_bookmark_data),
         'B': Option('List bookmarks by date',
@@ -82,7 +91,11 @@ if __name__ == '__main__':
                     commands.ListBookmarksCommand(order_by='title')),
         'D': Option('Delete a bookmark', commands.DeleteBookmarkCommand(),
                     prep_call=get_bookmark_id_for_deletion),
-        'Q': Option('Quit', commands.QuitCommand())
-    }
+        'G': Option('Import GitHub stars',
+                    commands.ImportGithubStarsCommand(),
+                    prep_call=get_github_import_options
+                    ),
+        'Q': Option('Quit', commands.QuitCommand()),
+    })
     while True:
-       loop()
+        loop()
