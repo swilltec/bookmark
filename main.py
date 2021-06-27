@@ -75,7 +75,7 @@ def loop():
     print_options(options)
     chosen_option = get_option_choice(options)
     chosen_option.choose()
-    _ = input('Press ENTER to return to menu')
+    _ = input('Press ENTER to return to menu: ')
 
 
 if __name__ == '__main__':
