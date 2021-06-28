@@ -1,15 +1,5 @@
 import sqlite3
 
-Create_table = """CREATE TABLE IF NOT EXISTS bookmarks
-(
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-title TEXT NOT NULL,
-url TEXT NOT NULL,
-NOT NULL requires a column
-notes TEXT,
-date_added TEXT NOT NULL
-);"""
-
 
 class DatabaseManager:
     def __init__(self, database_filename):
@@ -20,12 +10,12 @@ class DatabaseManager:
 
     def _execute(self, statement, values=None):
         with self.connection:
-            cursor=self.connection.cursor()
+            cursor = self.connection.cursor()
             cursor.execute(statement, values or [])
             return cursor
 
     def create_table(self, table_name, columns):
-        columns_with_types=[
+        columns_with_types = [
             f'{column_name} {data_type}'
             for column_name, data_type in columns.items()
         ]
@@ -34,11 +24,11 @@ class DatabaseManager:
             CREATE TABLE IF NOT EXISTS {table_name}
             ({', '.join(columns_with_types)});
             '''
-            )
-    
+        )
+
     def add(self, table_name, data):
         column_names = ', '.join(data.keys())
-        placeholder = ', '.join('?' * len( data ))
+        placeholder = ', '.join('?' * len(data))
         column_values = tuple(data.values())
 
         self._execute(
@@ -49,7 +39,29 @@ class DatabaseManager:
             ''',
             column_values
         )
+        
+        
+    def update(self, table_name, condition, data):
+        
+        update_placeholders = [f'{column} = ?' for column in condition.keys()]
+        update_condition = ' AND '.join(update_placeholders)
+
+        data_placeholders = ', '.join(f'{key} = ?' for key in data.keys())
+
+        values = tuple(data.values()) + tuple(condition.values())
+
+        self._execute(
+            f'''
+            UPDATE {table_name}
+            SET {data_placeholders}
+            WHERE {update_condition};
+            ''',
+            values,
+        )
+
     
+    
+
     def delete(self, table_name, conditions):
         placeholder = [f'{column} = ?' for column in conditions.keys()]
         delete_conditions = 'AND '.join(placeholder)
@@ -59,9 +71,9 @@ class DatabaseManager:
             WHERE { delete_conditions };
             ''',
             tuple(conditions.values()
-            )
+                  )
         )
-    
+
     def select(self, table_name, conditions=None, order_by=None):
         conditions = conditions or {}
         query = f'SELECT * FROM {table_name}'
@@ -73,10 +85,8 @@ class DatabaseManager:
 
         if order_by:
             query += f' ORDER BY {order_by}'
-        
+
         return self._execute(
             query,
             tuple(conditions.values()),
         )
-        
-
