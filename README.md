@@ -9,6 +9,16 @@ you to create bookmarks that, for now, will be made up of a few pieces of inform
 - Notes: An optional, long description or explanation about the bookmark
 - Date added: A creation date timestamp 
 
+## Getting Started
+1. Clone the repo
+   ```sh
+   git clone https://github.com/swilltec/bookmark/
+   ```
+2. Navigate to bookmark directory and run
+  ```sh
+  Python3 main.py
+  ```
+
 ## Architecture
 This project is divided into three layers of presentation, persistence, and actions or rules
 is a common pattern. Some variations on this approach are so common, they’ve been
